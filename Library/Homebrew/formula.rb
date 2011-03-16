@@ -663,10 +663,11 @@ EOF
         @deps << name
       when Hash
         key, value = name.shift
+        # TODO - take a list of values
         case value
         when :python, :perl, :ruby, :jruby
           @external_deps[value] << key
-        when :optional, :recommended, :build
+        when :optional, :recommended, :build, :universal
           @deps << key
         else
           raise "Unsupported dependency type #{value}"

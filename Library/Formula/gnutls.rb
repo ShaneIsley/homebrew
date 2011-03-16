@@ -7,7 +7,7 @@ class Gnutls < Formula
 
   depends_on 'pkg-config' => :build
   depends_on 'libgcrypt'
-  depends_on 'libtasn1' => :optional
+  depends_on 'libtasn1' => :universal
 
   def patches
     DATA

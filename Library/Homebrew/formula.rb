@@ -94,7 +94,7 @@ end
 class Formula
   include FileUtils
 
-  attr_reader :name, :path, :url, :version, :homepage, :specs, :downloader
+  attr_reader :name, :path, :url, :version, :homepage, :specs, :downloader, :library
 
   # Homebrew determines the name
   def initialize name='__UNKNOWN__', path=nil
@@ -131,11 +131,22 @@ class Formula
     CHECKSUM_TYPES.each { |type| set_instance_variable type }
 
     @downloader=download_strategy.new @spec_to_use.url, name, version, @spec_to_use.specs
+
+    set_instance_variable 'library' # Used for testing arch
   end
 
-  # if the dir is there, but it's empty we consider it not installed
-  def installed?
-    return installed_prefix.children.length > 0
+  def installed? option=nil
+    # if the dir is there, but it's empty we consider it not installed
+    is_installed = installed_prefix.children.length > 0
+    return false unless is_installed
+
+    if option == :universal and f.library
+      # Installed, but test if f.library is universal
+      lib_arch = archs_for_command(f.lib+f.library)
+      return lib_arch.universal?
+    else
+      return true
+    end
   rescue
     return false
   end
@@ -626,6 +637,7 @@ EOF
 
     attr_rw :version, :homepage, :specs, :deps, :external_deps
     attr_rw :keg_only_reason, :fails_with_llvm_reason, :skip_clean_all
+    attr_rw :library
     attr_rw(*CHECKSUM_TYPES)
 
     def head val=nil, specs=nil

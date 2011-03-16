@@ -5,6 +5,8 @@ class Libtasn1 < Formula
   homepage 'http://www.gnu.org/software/libtasn1/'
   md5 'f4f4035b84550100ffeb8ad4b261dea9'
 
+  library 'libtasn1.3.dylib'
+
   def install
     system "./configure", "--prefix=#{prefix}", "--disable-dependency-tracking"
     system "make install"

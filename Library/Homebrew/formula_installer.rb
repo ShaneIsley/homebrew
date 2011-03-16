@@ -16,6 +16,7 @@ class FormulaInstaller
     end
 
     unless ignore_deps
+      # if dep is => :universal, check :universal instead
       needed_deps = @f.recursive_deps.reject {|d| d.installed?}
       unless needed_deps.empty?
         puts "Also installing dependencies: "+needed_deps*", "

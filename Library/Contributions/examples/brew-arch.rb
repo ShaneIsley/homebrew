@@ -6,5 +6,5 @@ name = ARGV.shift
 f = Formula.factory name
 arch = f.arch
 
-puts arch*"\n"
+puts "Architectures: "+arch*", "
 puts "Universal? #{arch.universal?}"

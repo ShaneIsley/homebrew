@@ -6,12 +6,10 @@ class Gnutls < Formula
   sha1 '4530657082a0e754356de89a5529d1ad7a18e777'
 
   depends_on 'pkg-config' => :build
-  depends_on 'libgcrypt'
-  depends_on 'libtasn1' => :universal
+  depends_on 'libgcrypt'  => :universal
+  depends_on 'libtasn1'   => :universal
 
-  def patches
-    DATA
-  end
+  def patches; DATA; end
 
   fails_with_llvm "Undefined symbols when linking", :build => "2326"
 

@@ -94,7 +94,8 @@ end
 class Formula
   include FileUtils
 
-  attr_reader :name, :path, :url, :version, :homepage, :specs, :downloader, :library
+  attr_reader :name, :path, :url, :version, :homepage, :specs, :downloader
+  attr_reader :test_arch_using
 
   # Homebrew determines the name
   def initialize name='__UNKNOWN__', path=nil
@@ -132,7 +133,7 @@ class Formula
 
     @downloader=download_strategy.new @spec_to_use.url, name, version, @spec_to_use.specs
 
-    set_instance_variable 'library' # Used for testing arch
+    set_instance_variable 'test_arch_using'
   end
 
   def installed? option=nil
@@ -230,6 +231,19 @@ class Formula
 
   def fails_with_llvm?
     self.class.fails_with_llvm_reason || false
+  end
+
+  def arch
+    # test_arch_using
+    if installed?
+      if self.class.test_arch_using
+        return archs_for_command(lib+self.class.test_arch_using)
+      else
+        return [:unknown].extend(ArchitectureListExtension)
+      end
+    else
+      return [:uninstalled].extend(ArchitectureListExtension)
+    end
   end
 
   # sometimes the clean process breaks things
@@ -637,7 +651,7 @@ EOF
 
     attr_rw :version, :homepage, :specs, :deps, :external_deps
     attr_rw :keg_only_reason, :fails_with_llvm_reason, :skip_clean_all
-    attr_rw :library
+    attr_rw :test_arch_using
     attr_rw(*CHECKSUM_TYPES)
 
     def head val=nil, specs=nil
@@ -716,6 +730,10 @@ EOF
 
     def fails_with_llvm msg=nil, data=nil
       @fails_with_llvm_reason = FailsWithLLVM.new(msg, data)
+    end
+
+    def test_arch_with filename
+      @test_arch_using = filename
     end
   end
 end

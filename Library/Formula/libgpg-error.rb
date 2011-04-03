@@ -5,6 +5,8 @@ class LibgpgError < Formula
   homepage 'http://www.gnupg.org/'
   sha1 '95b324359627fbcb762487ab6091afbe59823b29'
 
+  test_arch_with 'libgpg-error.dylib'
+
   def install
     ENV.j1
     ENV.universal_binary  # build fat so wine can use it

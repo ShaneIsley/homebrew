@@ -5,7 +5,9 @@ class Libgcrypt < Formula
   sha1 '445b9e158aaf91e24eae3d1040c6213e9d9f5ba6'
   homepage 'http://directory.fsf.org/project/libgcrypt/'
 
-  depends_on 'libgpg-error'
+  depends_on 'libgpg-error' => :universal
+
+  test_arch_with 'libgcrypt.dylib'
 
   def install
     ENV.universal_binary	# build fat so wine can use it

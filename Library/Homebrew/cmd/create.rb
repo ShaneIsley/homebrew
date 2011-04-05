@@ -42,6 +42,7 @@ module Homebrew extend self
         fc.generate
         fc.path
       end
+      # puts "Please run `brew audit "+paths*" "+"` before submitting, thanks."
       exec_editor *paths
     end
   end

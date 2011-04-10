@@ -95,7 +95,6 @@ class Formula
   include FileUtils
 
   attr_reader :name, :path, :url, :version, :homepage, :specs, :downloader
-  attr_reader :test_arch_using
 
   # Homebrew determines the name
   def initialize name='__UNKNOWN__', path=nil
@@ -132,8 +131,6 @@ class Formula
     CHECKSUM_TYPES.each { |type| set_instance_variable type }
 
     @downloader=download_strategy.new @spec_to_use.url, name, version, @spec_to_use.specs
-
-    set_instance_variable 'test_arch_using'
   end
 
   def installed? option=nil
@@ -233,16 +230,22 @@ class Formula
     self.class.fails_with_llvm_reason || false
   end
 
-  def arch
-    # test_arch_using
-    if installed?
-      if self.class.test_arch_using
-        return archs_for_command(lib+self.class.test_arch_using)
-      else
-        return [:unknown].extend(ArchitectureListExtension)
-      end
+  def test_arch_using
+    return nil unless self.class.test_arch_using
+    if File.extname(self.class.test_arch_using) == ".dylib"
+      lib+self.class.test_arch_using
     else
-      return [:uninstalled].extend(ArchitectureListExtension)
+      bin+self.class.test_arch_using
+    end
+  end
+
+  def arch
+    return [:uninstalled].extend(ArchitectureListExtension) unless installed?
+
+    if self.test_arch_using
+      return archs_for_command(self.test_arch_using)
+    else
+      return [:unknown].extend(ArchitectureListExtension)
     end
   end
 

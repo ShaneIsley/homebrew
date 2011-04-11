@@ -8,6 +8,7 @@ class Dependency
 
   def initialize name, tags=nil
     @name = name
+    tags = [] if tags == nil
     @tags = tags
   end
 
@@ -459,6 +460,8 @@ class Formula
     Formula.expand_deps(self).flatten.uniq
   end
 
+  # I think this should (A) still return deps instead of formulae and
+  # (B) move into Dependencies
   def self.expand_deps f
     f.deps.map do |dep|
       dep = Formula.factory dep.to_s

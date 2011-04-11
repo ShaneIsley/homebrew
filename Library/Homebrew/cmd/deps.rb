@@ -10,7 +10,9 @@ module Homebrew extend self
     else
       all_deps = ARGV.formulae.map{ |f| ARGV.one? ? f.deps : f.recursive_deps }.intersection
       all_deps.sort! unless ARGV.include? "-n"
-      puts all_deps
+      all_deps.each do |d|
+        puts "#{d.name} #{d.tags * ", "}"
+      end
     end
   end
 end

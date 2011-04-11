@@ -56,7 +56,7 @@ def install f
   ENV.prepend 'PATH', HOMEBREW_BIN, ':' unless ORIGINAL_PATHS.include? HOMEBREW_BIN
 
   f.deps.uniq.each do |dep|
-    dep = Formula.factory dep
+    dep = Formula.factory dep.name
     if dep.keg_only?
       ENV.prepend 'LDFLAGS', "-L#{dep.lib}"
       ENV.prepend 'CPPFLAGS', "-I#{dep.include}"

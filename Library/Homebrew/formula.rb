@@ -658,26 +658,27 @@ EOF
       @specs = specs
     end
 
-    def depends_on name
+    def depends_on dep
       @deps ||= []
       @external_deps ||= {:python => [], :perl => [], :ruby => [], :jruby => []}
 
-      case name
-      when String, Formula, Dependency
-        @deps << name
+      case dep
+      when String
+        @deps << Dependency.new(dep)
+      when Formula
+        @deps << Dependency.new(dep.name)
+      when Dependency
+        @deps << dep
       when Hash
-        key, value = name.shift
+        key, value = dep.shift
         case value
         when :python, :perl, :ruby, :jruby
           @external_deps[value] << key
         when :optional, :recommended, :build
-          @deps << key
+          @deps << Dependency.new(key, [value])
         else
           raise "Unsupported dependency type #{value}"
         end
-      when Symbol
-        opoo "#{self.name} -- #{name}: Using symbols for deps is deprecated; use a string instead"
-        @deps << name.to_s
       else
         raise "Unsupported type #{name.class}"
       end

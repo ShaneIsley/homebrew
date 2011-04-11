@@ -1,6 +1,22 @@
 require 'download_strategy'
 require 'fileutils'
 
+
+# Represents a formula dependency
+class Dependency
+  attr_reader :name, :tags
+
+  def initialize name, tags
+    self.name = name
+    self.tags = tags
+  end
+
+  def to_s
+    self.name
+  end
+end
+
+
 # Defines a URL and download method for a stable or HEAD build
 class SoftwareSpecification
   attr_reader :url, :specs, :using
@@ -647,7 +663,7 @@ EOF
       @external_deps ||= {:python => [], :perl => [], :ruby => [], :jruby => []}
 
       case name
-      when String, Formula
+      when String, Formula, Dependency
         @deps << name
       when Hash
         key, value = name.shift

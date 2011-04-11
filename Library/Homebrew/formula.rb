@@ -21,6 +21,13 @@ class Dependency
 end
 
 
+class Dependencies < Array
+  def include? dependency_name
+    self.any?{|d| d.name == dependency_name}
+  end
+end
+
+
 # Defines a URL and download method for a stable or HEAD build
 class SoftwareSpecification
   attr_reader :url, :specs, :using
@@ -439,7 +446,7 @@ class Formula
   end
 
   def deps
-    self.class.deps or []
+    self.class.deps or Dependencies.new
   end
 
   def external_deps
@@ -663,7 +670,7 @@ EOF
     end
 
     def depends_on dep
-      @deps ||= []
+      @deps ||= Dependencies.new
       @external_deps ||= {:python => [], :perl => [], :ruby => [], :jruby => []}
 
       case dep

@@ -462,6 +462,8 @@ class Formula
 
   # I think this should (A) still return deps instead of formulae and
   # (B) move into Dependencies
+  # Need separate methods for "get the full list of recursive deps" and
+  # "resolve this list of deps into formulae".
   def self.expand_deps f
     f.deps.map do |dep|
       dep = Formula.factory dep.to_s

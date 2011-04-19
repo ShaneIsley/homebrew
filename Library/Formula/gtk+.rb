@@ -13,7 +13,8 @@ class Gtkx < Formula
 
   # Used by pango, but keg-only, so needs to be added to
   # the flags for gtk+ explicitly.
-  depends_on 'cairo' if MacOS.leopard?
+  # Also need a newer Cairo to use the quartz back-end.
+  depends_on 'cairo' if MacOS.leopard? or ARGV.include? "--quartz"
 
   depends_on 'pango'
   depends_on 'jasper' => :optional
@@ -21,10 +22,18 @@ class Gtkx < Formula
 
   fails_with_llvm "Undefined symbols when linking", :build => "2326"
 
+  def options
+    [['--quartz', 'Use the Quartz backend instead of X11']]
+  end
+
   def install
-    system "./configure", "--disable-debug", "--disable-dependency-tracking",
-                          "--prefix=#{prefix}",
-                          "--disable-glibtest"
+    args = ["--disable-debug",
+            "--disable-dependency-tracking",
+            "--prefix=#{prefix}",
+            "--disable-glibtest"]
+    args << "--with-gdktarget=quartz" if ARGV.include? "--quartz"
+    system "./configure", *args
+
     system "make install"
   end
 

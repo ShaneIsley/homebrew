@@ -299,6 +299,10 @@ class GitDownloadStrategy < AbstractDownloadStrategy
         when :tag
           nostdout { quiet_safe_system 'git', 'checkout', @ref }
         end
+      else
+        # Otherwise explicitly check out the master branch
+        ohai "Checking out branch master"
+        nostdout { quiet_safe_system 'git', 'checkout', "origin/master" }
       end
       # http://stackoverflow.com/questions/160608/how-to-do-a-git-export-like-svn-export
       safe_system 'git', 'checkout-index', '-a', '-f', "--prefix=#{dst}/"

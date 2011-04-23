@@ -466,8 +466,8 @@ class Formula
   # "resolve this list of deps into formulae".
   def self.expand_deps f
     f.deps.map do |dep|
-      dep = Formula.factory dep.to_s
-      expand_deps(dep) << dep
+      f_dep = Formula.factory dep.to_s
+      expand_deps(f_dep) << f_dep
     end
   end
 

@@ -14,6 +14,10 @@ class Dependency
   def to_s
     @name
   end
+
+  def ==(other_dep)
+    @name = other_dep.to_s
+  end
 end
 
 

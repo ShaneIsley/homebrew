@@ -56,12 +56,12 @@ def install f
   ENV.prepend 'PATH', HOMEBREW_BIN, ':' unless ORIGINAL_PATHS.include? HOMEBREW_BIN
 
   f.deps.uniq.each do |dep|
-    dep = Formula.factory dep.name
-    if dep.keg_only?
-      ENV.prepend 'LDFLAGS', "-L#{dep.lib}"
-      ENV.prepend 'CPPFLAGS', "-I#{dep.include}"
-      ENV.prepend 'PATH', "#{dep.bin}", ':'
-      ENV.prepend 'PKG_CONFIG_PATH', dep.lib+'pkgconfig', ':'
+    f_dep = Formula.factory dep.name
+    if f_dep.keg_only?
+      ENV.prepend 'LDFLAGS', "-L#{f_dep.lib}"
+      ENV.prepend 'CPPFLAGS', "-I#{f_dep.include}"
+      ENV.prepend 'PATH', "#{f_dep.bin}", ':'
+      ENV.prepend 'PKG_CONFIG_PATH', f_dep.lib+'pkgconfig', ':'
     end
   end
 

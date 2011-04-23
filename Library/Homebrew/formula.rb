@@ -6,13 +6,13 @@ require 'fileutils'
 class Dependency
   attr_reader :name, :tags
 
-  def initialize name, tags
-    self.name = name
-    self.tags = tags
+  def initialize name, tags=nil
+    @name = name
+    @tags = tags
   end
 
   def to_s
-    self.name
+    @name
   end
 end
 
@@ -450,7 +450,7 @@ class Formula
 
   def self.expand_deps f
     f.deps.map do |dep|
-      dep = Formula.factory dep
+      dep = Formula.factory dep.to_s
       expand_deps(dep) << dep
     end
   end

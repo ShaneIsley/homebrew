@@ -1,32 +1,6 @@
 require 'download_strategy'
+require 'dependencies'
 require 'fileutils'
-
-
-# Represents a formula dependency
-class Dependency
-  attr_reader :name, :tags
-
-  def initialize name, tags=nil
-    @name = name
-    tags = [] if tags == nil
-    @tags = tags
-  end
-
-  def to_s
-    @name
-  end
-
-  def ==(other_dep)
-    @name = other_dep.to_s
-  end
-end
-
-
-class Dependencies < Array
-  def include? dependency_name
-    self.any?{|d| d.name == dependency_name}
-  end
-end
 
 
 # Defines a URL and download method for a stable or HEAD build

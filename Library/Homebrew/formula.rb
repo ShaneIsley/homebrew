@@ -690,6 +690,8 @@ EOF
         case value
         when :python, :perl, :ruby, :jruby
           @external_deps[value] << key
+        when Array
+          @deps << Dependency.new(key, value)
         when :optional, :recommended, :build
           @deps << Dependency.new(key, [value])
         else

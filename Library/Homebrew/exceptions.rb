@@ -57,17 +57,17 @@ end
 class UnsatisfiedExternalDependencyError < Homebrew::InstallationError
   attr :type
 
-  def initialize formula, type
+  def initialize type, name
     @type = type
-    @formula = formula
+    @name = name
   end
 
   def message
     <<-EOS.undent
-      Unsatisfied dependency: #{formula}
+      Unsatisfied dependency: #{name}
       Homebrew does not provide #{type.to_s.capitalize} dependencies, #{tool} does:
 
-          #{command_line} #{formula}
+          #{command_line} #{name}
       EOS
   end
 

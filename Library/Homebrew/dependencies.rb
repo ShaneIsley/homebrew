@@ -1,4 +1,3 @@
-# Represents a formula dependency
 class Dependency
   attr_reader :name, :tags
 

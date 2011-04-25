@@ -5,6 +5,8 @@ class Tig < Formula
   homepage 'http://jonas.nitro.dk/tig/'
   md5 'f373343199422c59518776db448dec0e'
 
+  depends_on 'spoo' => :python
+
   def install
     system "./configure", "--prefix=#{prefix}"
     system "make install"

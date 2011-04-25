@@ -35,18 +35,9 @@ class FormulaInstaller
 
   def self.check_external_deps f
     f.external_deps.each do |dep|
-      unless quiet_system(*external_dep_check(dep.module_name, dep.type))
-        raise UnsatisfiedExternalDependencyError.new(dep.type, dep.module_name)
+      unless quiet_system(*dep.install_test)
+        raise UnsatisfiedExternalDependencyError.new(dep)
       end
-    end
-  end
-
-  def self.external_dep_check dep, type
-    case type
-      when :python then %W{/usr/bin/env python -c import\ #{dep}}
-      when :jruby then %W{/usr/bin/env jruby -rubygems -e require\ '#{dep}'}
-      when :ruby then %W{/usr/bin/env ruby -rubygems -e require\ '#{dep}'}
-      when :perl then %W{/usr/bin/env perl -e use\ #{dep}}
     end
   end
 

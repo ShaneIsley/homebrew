@@ -55,43 +55,14 @@ class FormulaInstallationAlreadyAttemptedError < Homebrew::InstallationError
 end
 
 class UnsatisfiedExternalDependencyError < Homebrew::InstallationError
-  attr :type
+  attr :dep
 
-  def initialize type, name
-    @type = type
-    @name = name
+  def initialize dep
+    @dep = dep
   end
 
   def message
-    <<-EOS.undent
-      Unsatisfied dependency: #{@name}
-      Homebrew does not provide #{type.to_s.capitalize} dependencies, #{tool} does:
-
-          #{command_line} #{@name}
-      EOS
-  end
-
-  private
-
-  def tool
-    case type
-      when :python then 'easy_install'
-      when :ruby, :jruby then 'rubygems'
-      when :perl then 'cpan'
-    end
-  end
-
-  def command_line
-    case type
-      when :python
-        "easy_install install"
-      when :ruby
-        "gem install"
-      when :perl
-        "cpan -i"
-      when :jruby
-        "jruby -S gem install"
-    end
+    dep.message
   end
 end
 

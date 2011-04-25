@@ -18,7 +18,8 @@ class AtsLangAnairiats < Formula
     # glib contrib hardcodes the include search path
     glib = Formula.factory 'glib'
     inreplace "contrib/glib/Makefile" do |s|
-      s.gsub! 'INCLUDES= $(GLIBINC) -I"/usr/include/glib-2.0"', "INCLUDES= -I#{glib.include} -I#{glib.lib}/glib-2.0/include"
+      s.gsub! 'INCLUDES= $(GLIBINC) -I"/usr/include/glib-2.0"',
+              "INCLUDES= -I#{glib.include} -I#{glib.lib}/glib-2.0/include -I#{glib.include}/glib-2.0"
     end
 
     system "./configure", "--prefix=#{prefix}",

@@ -1,6 +1,6 @@
 require 'formula'
 
-class AtsLangAnairiats <Formula
+class AtsLangAnairiats < Formula
   url 'http://downloads.sourceforge.net/sourceforge/ats-lang/ats-lang-anairiats-0.2.4.tar.gz'
   homepage 'http://www.ats-lang.org'
   md5 'ae9813eacddeb03dbe5db10856a5648a'
@@ -20,7 +20,7 @@ class AtsLangAnairiats <Formula
     inreplace "contrib/glib/Makefile" do |s|
       s.gsub! 'INCLUDES= $(GLIBINC) -I"/usr/include/glib-2.0"', "INCLUDES= -I#{glib.include} -I#{glib.lib}/glib-2.0/include"
     end
-    raise
+
     system "./configure", "--prefix=#{prefix}",
                           "--disable-glibtest",
                           "--disable-gtktest"

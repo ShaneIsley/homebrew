@@ -34,12 +34,10 @@ class FormulaInstaller
   end
 
   def self.check_external_deps f
-    [:ruby, :python, :perl, :jruby].each do |type|
-      f.external_deps[type].each do |dep|
-        unless quiet_system(*external_dep_check(dep, type))
-          raise UnsatisfiedExternalDependencyError.new(type, dep)
-        end
-      end if f.external_deps[type]
+    f.external_deps.each do |dep|
+      unless quiet_system(*external_dep_check(dep.module_name, dep.type))
+        raise UnsatisfiedExternalDependencyError.new(dep.type, dep.module_name)
+      end
     end
   end
 

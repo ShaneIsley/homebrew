@@ -650,7 +650,7 @@ EOF
 
     def depends_on dep
       @deps ||= Dependencies.new
-      @external_deps ||= {:python => [], :perl => [], :ruby => [], :jruby => []}
+      @external_deps ||= []
 
       case dep
       when String
@@ -659,11 +659,13 @@ EOF
         @deps << Dependency.new(dep.name)
       when Dependency
         @deps << dep
+      when ExternalDependency
+        @external_deps << dep
       when Hash
         key, value = dep.shift
         case value
         when :python, :perl, :ruby, :jruby
-          @external_deps[value] << key
+          @external_deps << ExternalDependency.new(value, key)
         when Array
           @deps << Dependency.new(key, value)
         when :optional, :recommended, :build

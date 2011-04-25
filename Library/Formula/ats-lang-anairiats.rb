@@ -6,25 +6,26 @@ class AtsLangAnairiats <Formula
   md5 'ae9813eacddeb03dbe5db10856a5648a'
 
   depends_on 'pkg-config' => :build
-  depends_on 'glib'
-  depends_on 'gtk+'
   depends_on 'gmp'
+  depends_on 'glib' => :optional
+  depends_on 'gtk+' => :optional
 
   def install
     ENV.j1
-    ENV['ATSHOME']=pwd
-    ENV['ATSHOMERELOC']="ATS-#{version}"
-    system "./configure", "--prefix=#{prefix}"
+    ENV['ATSHOME'] = pwd
+    ENV['ATSHOMERELOC'] = "ATS-#{version}"
+
+    # glib contrib hardcodes the include search path
+    glib = Formula.factory 'glib'
+    inreplace "contrib/glib/Makefile" do |s|
+      s.gsub! 'INCLUDES= $(GLIBINC) -I"/usr/include/glib-2.0"', "INCLUDES= -I#{glib.include} -I#{glib.lib}/glib-2.0/include"
+    end
+    raise
+    system "./configure", "--prefix=#{prefix}",
+                          "--disable-glibtest",
+                          "--disable-gtktest"
     system "make all"
     system "make install"
-  end
-
-  def caveats; <<-EOS.undent
-    In order to use ATS/GTK, you must have gtk+ installed. To do so, run:
-      $ brew install gtk
-    In order to use ATK/Cairo, you must have cairo installed. To do so, run:
-      $ brew install cairo
-    EOS
   end
 
   def test

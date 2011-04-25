@@ -1,3 +1,10 @@
+class Dependencies < Array
+  def include? dependency_name
+    self.any?{|d| d.name == dependency_name}
+  end
+end
+
+
 class Dependency
   attr_reader :name, :tags
 
@@ -13,12 +20,5 @@ class Dependency
 
   def ==(other_dep)
     @name = other_dep.to_s
-  end
-end
-
-
-class Dependencies < Array
-  def include? dependency_name
-    self.any?{|d| d.name == dependency_name}
   end
 end
